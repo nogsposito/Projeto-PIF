@@ -1,2 +1,16 @@
-hello: hello.c
-  gcc -o hello hello.c #cria hello de hello.c
+TARGET = hello
+
+CC = gcc
+
+CFLAGS = -Wall -g
+
+all: $(TARGET)
+
+$(TARGET): hello.o
+	$(CC) $(CFLAGS) -o $(TARGET) hello.o
+
+hello.o: hello.c
+	$(CC) $(CFLAGS) -c hello.c
+
+clean:
+	rm -f *.o $(TARGET)
