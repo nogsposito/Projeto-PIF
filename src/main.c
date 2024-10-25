@@ -11,6 +11,7 @@
 #include "keyboard.h"
 #include "timer.h"
 
+int a;
 int x = 34, y = 12;
 int incX = 1, incY = 1;
 
