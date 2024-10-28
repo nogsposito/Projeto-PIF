@@ -4,8 +4,18 @@
 #include "keyboard.h"
 #include "timer.h"
 
+struct bola{};
+
+struct barra{};
+
+struct brick{};
+
+void printBola(){}
+
+void printBarra(){}
+
 int main(){
-    
+
     screenInit(1);
     keyboardInit();
     timerInit(50); // valor temporario
