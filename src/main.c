@@ -10,6 +10,8 @@ struct barra{};
 
 struct brick{};
 
+struct bonus{};
+
 void printBola(){}
 
 void printBarra(){}
