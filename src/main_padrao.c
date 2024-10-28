@@ -1,4 +1,6 @@
 /**
+ * SÓ PARA SE BASEAR <-> ORIGINAL
+ * 
  * main.h
  * Created on Aug, 23th 2023
  * Author: Tiago Barros
