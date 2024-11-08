@@ -4,19 +4,41 @@
 #include "keyboard.h"
 #include "timer.h"
 
-struct bola{};
+int x = 34, y = 12;
 
-struct barra{};
+struct ball{
+  int x;
+  int y;
+};
+
+struct bar{};
 
 struct brick{};
 
 struct bonus{};
 
-void printBola(){}
+struct ranking{ // lista encadeada
+  char jogador[20];
+  int tempo;
+  struct ranking *next;
+};
+
+void printBola(int nextX, int nextY, struct ball bola){
+
+    screenSetColor(WHITE, DARKGRAY);
+
+    screenGotoxy(x, y);
+    bola.x = nextX;
+    bola.y = nextY;
+
+    printf("𒊹");
+}
 
 void printBarra(){}
 
 int main(){
+
+    static int ch = 0;
 
     screenInit(1);
     keyboardInit();
