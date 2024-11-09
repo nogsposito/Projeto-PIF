@@ -11,17 +11,33 @@ struct ball{
   int y;
 };
 
-struct bar{};
+struct bar{
+  int x;
+  int y;
+};
 
-struct brick{};
+struct brick{
+  int x;
+  int y;
+};
 
 struct bonus{};
 
-struct ranking{ // lista encadeada
-  char jogador[20];
+struct player{
+  char nome[20];
   int tempo;
+};
+
+struct ranking{ // lista encadeada
+  struct player jogador;
   struct ranking *next;
 };
+
+void inserirJoador(struct ranking **head){
+    if (*head == NULL){
+      (*head) = (struct ranking*)malloc(sizeof(struct ranking));
+    }
+}
 
 void printBola(int nextX, int nextY, struct ball bola){
 
