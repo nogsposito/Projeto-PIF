@@ -99,9 +99,12 @@ void updateBonus(){
     // update no jogo
 }
 
+// para manter e organizar os jogadores:
+
 void inserirJogador(struct ranking **head){
    if (*head == NULL){
       (*head) = (struct ranking*)malloc(sizeof(struct ranking));
+
     }
 }
 
