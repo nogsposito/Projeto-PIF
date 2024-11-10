@@ -7,25 +7,42 @@
 int x = 34, y = 12;
 
 struct ball{
+
   int x;
   int y;
+
+  int direcaoX;
+  int direcaoY;
+
+  int velocidade;
+  int poder;
+
 };
 
 struct bar{
+
   int x;
   int y;
+
+  int velocidade;
+
 };
 
 struct brick{
+
+  int estado;
+
   int x;
   int y;
+
 };
 
 struct bonus{};
 
 struct player{
-  char nome[20];
-  int tempo;
+  char nome[50];
+  int tempoEmMs;
+  int tijolosQuebrados;
 };
 
 struct ranking{ // lista encadeada
@@ -33,11 +50,11 @@ struct ranking{ // lista encadeada
   struct ranking *next;
 };
 
-void inserirJoador(struct ranking **head){
-    if (*head == NULL){
-      (*head) = (struct ranking*)malloc(sizeof(struct ranking));
-    }
-}
+//void inserirJogador(struct ranking **head){
+//   if (*head == NULL){
+//      (*head) = (struct ranking*)malloc(sizeof(struct ranking));
+//    }
+//}
 
 void printBola(int nextX, int nextY, struct ball bola){
 
