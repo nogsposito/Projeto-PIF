@@ -27,7 +27,7 @@ struct brick{
     int y;
 };
 
-struct bonus{};
+//struct bonus{};
 
 struct player{
     char nome[50];
@@ -93,11 +93,11 @@ void updateBrick(){
 
 }
 
-void updateBonus(){
+//void updateBonus(){
 
     // checa colisoes com (bola?) ou barra
     // update no jogo
-}
+//}
 
 // para manter e organizar os jogadores:
 
