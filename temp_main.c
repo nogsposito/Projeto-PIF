@@ -19,6 +19,7 @@ struct bar{
     int x;
     int y;
     int velocidade;
+    int largura;
 };
 
 struct brick{
@@ -66,9 +67,28 @@ void printBonus(){
 
 // comecando o jogo:
 
-void startGame(){}
+void startBarra(struct bar barra){
+  barra.x = (SCREEN_WIDTH / 2);
+  barra.y = (SCREEN_HEIGHT - (SCREEN_HEIGHT / 4));
+
+  barra.largura = 1;
+  barra.velocidade = 1;
+}
 
 void startBricks(){}
+
+void startBola(struct ball bola){
+
+  bola.x = (SCREEN_WIDTH / 2);
+  bola.y = (SCREEN_HEIGHT - (SCREEN_HEIGHT / 4));
+
+  bola.direcaoX = 1;
+  bola.direcaoY = 1;
+
+  bola.velocidade = 1;
+  bola.poder = 1;
+
+}
 
 // mudando e atualizando o jogo:
 
@@ -120,11 +140,20 @@ int main(){
 
     static int ch = 0;
 
+    struct ball bola;
+    struct bar barra;
+    struct brick tijolo;
+
     screenInit(1);
     keyboardInit();
     timerInit(50); // valor temporario
 
-    // jogo
+    startBola(bola);
+
+    while(ch){ // mudar
+      readch();
+
+    }
 
     keyboardDestroy();
     screenDestroy();
