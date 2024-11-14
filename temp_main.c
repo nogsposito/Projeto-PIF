@@ -4,7 +4,10 @@
 #include "keyboard.h"
 #include "timer.h"
 
-int x = 34, y = 12;
+int LARGURA_BARRA = 1;
+
+int LARGURA_TIJOLO = 2;
+int ALTURA_TIJOLO = 1;
 
 struct ball{
     int x;
@@ -23,6 +26,7 @@ struct bar{
 };
 
 struct brick{
+    int ativo;
     int estado;
     int x;
     int y;
@@ -48,7 +52,6 @@ void printBola(int nextX, int nextY, struct ball bola){
     // int x e y
 
     screenSetColor(WHITE, DARKGRAY);
-    screenGotoxy(x, y);
     printf("𒊹");
 
 }
@@ -71,11 +74,20 @@ void startBarra(struct bar barra){
   barra.x = (SCREEN_WIDTH / 2);
   barra.y = (SCREEN_HEIGHT - (SCREEN_HEIGHT / 4));
 
-  barra.largura = 1;
+  barra.largura = LARGURA_BARRA;
   barra.velocidade = 1;
 }
 
-void startBricks(){}
+void startBricks(struct brick tijolos[linhas][colunas]){
+  for (int i = 0; i < linhas; i++){
+    for (int j = 0; j < colunas; j++){
+      tijolos[i][j].x = j * (LARGURA_TIJOLO + 1);
+      tijolos[i][j].y = i * (ALTURA_TIJOLO + 1);
+
+      tijolos[i][j].ativo = 1;
+    }
+  }
+}
 
 void startBola(struct ball bola){
 
