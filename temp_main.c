@@ -158,13 +158,13 @@ void escreverArquivo(){ // ou usando lista encadeada
    fclose(placar);
 }
 
-void printLogo(){
-    printf(" ____       _      _      ____                 _             _ ");
-    printf("| __ ) _ __(_) ___| | __ | __ ) _ __ ___  __ _| | _____ _ __| |");
-    printf("|  _ \| '__| |/ __| |/ / |  _ \| '__/ _ \/ _` | |/ / _ \ '__| |");
-    printf("| |_) | |  | | (__|   <  | |_) | | |  __/ (_| |   <  __/ |  |_|");
-    printf("|____/|_|  |_|\___|_|\_\ |____/|_|  \___|\__,_|_|\_\___|_|  (_)");
-}
+//void printLogo(){
+//    printf(" ____       _      _      ____                 _             _ ");
+//    printf("| __ ) _ __(_) ___| | __ | __ ) _ __ ___  __ _| | _____ _ __| |");
+//    printf("|  _ \| '__| |/ __| |/ / |  _ \| '__/ _ \/ _` | |/ / _ \ '__| |");
+//    printf("| |_) | |  | | (__|   <  | |_) | | |  __/ (_| |   <  __/ |  |_|");
+//    printf("|____/|_|  |_|\___|_|\_\ |____/|_|  \___|\__,_|_|\_\___|_|  (_)");
+//}
 
 // programa principal:
 
@@ -195,8 +195,11 @@ int main(){
         // Update game state (move elements, verify collision, etc)
         if (timerTimeOver() == 1)
         {
-            int newX = x + incX;
-            if (newX >= (MAXX -strlen("Hello World") -1) || newX <= MINX+1) incX = -incX;
+            bola.x = bola.x + bola.velocidade;
+
+            if (newX >= (MAXX -strlen("Hello World") -1) || newX <= MINX+1){
+                    incX = -incX
+                };
             int newY = y + incY;
             if (newY >= MAXY-1 || newY <= MINY+1) incY = -incY;
 
