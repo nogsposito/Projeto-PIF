@@ -41,8 +41,7 @@ void printKey(int ch)
     else screenGotoxy(39, 23);
 
     printf("%d ", ch);
-    while (keyhit())
-    {
+    while (keyhit()){
         printf("%d ", readch());
     }
 }

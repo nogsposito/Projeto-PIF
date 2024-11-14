@@ -4,10 +4,8 @@
 #include "keyboard.h"
 #include "timer.h"
 
-int LARGURA_BARRA = 1;
-
-int LARGURA_TIJOLO = 2;
-int ALTURA_TIJOLO = 1;
+int playerX;
+int playerY;
 
 struct ball{
     int x;
@@ -47,7 +45,7 @@ struct ranking{ // lista encadeada
 
 // printagem de elementos:
 
-void printBola(int nextX, int nextY, struct ball bola){
+void printBola(struct ball bola){
 
     // int x e y
 
@@ -70,7 +68,10 @@ void printBonus(){
 
 // comecando o jogo:
 
-void startBarra(struct bar barra){
+void startBar(struct bar barra){
+
+  int LARGURA_BARRA = 1;
+
   barra.x = (SCREEN_WIDTH / 2);
   barra.y = (SCREEN_HEIGHT - (SCREEN_HEIGHT / 4));
 
@@ -79,6 +80,10 @@ void startBarra(struct bar barra){
 }
 
 void startBricks(struct brick tijolos[linhas][colunas]){
+
+  int LARGURA_TIJOLO = 2;
+  int ALTURA_TIJOLO = 1;
+
   for (int i = 0; i < linhas; i++){
     for (int j = 0; j < colunas; j++){
       tijolos[i][j].x = j * (LARGURA_TIJOLO + 1);
@@ -104,21 +109,27 @@ void startBola(struct ball bola){
 
 // mudando e atualizando o jogo:
 
-void updateBola(){
+void updateBola(struct ball bola, int x, int y){
 
     // checa colisoes com barra ou tijolos ou paredes
     // update no jogo
 
 }
 
-void updateBarra(){
+void updateBarra(struct bar barra, int ch, int x, int y){
+
+    if (ch == 97){ // se apertar 'a'
+        screenGotoxy((x-8), y);
+    } else if (ch == 100){ // se apertar 'e'
+        screenGotoxy((x+8), y);
+    }
 
     // checa colisoes com bola (ou bonus?)
     // update no jogo
 
 }
 
-void updateBrick(){
+void updateBrick(struct brick tijolo){
 
     // checa colisoes com bola
     // update no jogo
@@ -141,9 +152,18 @@ void inserirJogador(struct ranking **head){
 }
 
 void escreverArquivo(){ // ou usando lista encadeada
-
+   FILE *placar;
+   placar = fopen("ranking.txt", "a");
       // escreve no arquivo o resultado do jogador
+   fclose(placar);
+}
 
+void printLogo(){
+    printf(" ____       _      _      ____                 _             _ ");
+    printf("| __ ) _ __(_) ___| | __ | __ ) _ __ ___  __ _| | _____ _ __| |");
+    printf("|  _ \| '__| |/ __| |/ / |  _ \| '__/ _ \/ _` | |/ / _ \ '__| |");
+    printf("| |_) | |  | | (__|   <  | |_) | | |  __/ (_| |   <  __/ |  |_|");
+    printf("|____/|_|  |_|\___|_|\_\ |____/|_|  \___|\__,_|_|\_\___|_|  (_)");
 }
 
 // programa principal:
@@ -161,10 +181,37 @@ int main(){
     timerInit(50); // valor temporario
 
     startBola(bola);
+    startBar(barra);
+    startBricks(tijolo);
 
-    while(ch){ // mudar
-      readch();
+    printBarra();
+    printBola(bola);
+    printBrick();
 
+    int jogoAtivo = 1;
+
+    while (jogoAtivo == 1){
+
+        // Update game state (move elements, verify collision, etc)
+        if (timerTimeOver() == 1)
+        {
+            int newX = x + incX;
+            if (newX >= (MAXX -strlen("Hello World") -1) || newX <= MINX+1) incX = -incX;
+            int newY = y + incY;
+            if (newY >= MAXY-1 || newY <= MINY+1) incY = -incY;
+
+            printKey(ch);
+            printHello(newX, newY);
+
+            screenUpdate();
+        }
+
+        if (keyhit()) 
+        {
+            ch = readch();
+            printKey(ch);
+            screenUpdate();
+        }
     }
 
     keyboardDestroy();
