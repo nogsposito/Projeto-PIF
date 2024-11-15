@@ -30,11 +30,12 @@ struct ball{
 
 struct bar{
 
-    int x;
-    int y;
+    int y; // y fixo
 
+    int x;
     int preX;
-    int preY;
+
+    int velocidade;
 
     int largura;
     int altura;
@@ -71,13 +72,28 @@ void updateBall(struct ball *bola){
     bola->x += bola->dirX;
     bola->y += bola->dirY;
 
-    if (bola->x <= (MINX + 1) || bola->x >= (MAXX - 1))
-    {
+    if (bola->x <= (MINX + 1) || bola->x >= (MAXX - 1)){ //velocidade?
         bola->dirX = -bola->dirX;
     }
-    if (bola->y <= (MINY + 1) || bola->y >= (MAXY - 1))
-    {
+
+    if (bola->y <= (MINY + 1) || bola->y >= (MAXY - 1)){
         bola->dirY = -bola->dirY;
+    }
+
+}
+
+void updateBar(struct bar *barra){
+
+    barra->preX = barra->x;
+
+    barra->x += barra->velocidade;
+
+    if (keyhit()){
+        int ch = readch();
+
+        if (ch == '97'){ //a (left)
+            barra->x -= barra->velocidade;
+        }
     }
 
 }
@@ -158,6 +174,7 @@ int main(){
 
         if (timerTimeOver())
         {
+            updateBar(&barra);
             updateBall(&bola);
             printBall(&bola);
 
