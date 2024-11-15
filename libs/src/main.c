@@ -13,8 +13,8 @@
 #include "keyboard.h"
 #include "timer.h"
 
-struct ball
-{
+struct ball{
+
     int x;
     int y;
 
@@ -25,10 +25,10 @@ struct ball
     int preY;
 
     char simbolo;
+
 };
 
-void startBall(struct ball *bola)
-{
+void startBall(struct ball *bola){
 
     bola->x = 34;
     bola->y = 12;
@@ -36,11 +36,12 @@ void startBall(struct ball *bola)
     bola->dirX = 1;
     bola->dirY = 1;
 
-    bola->simbolo = '𒊹';
+    bola->simbolo = 'o';
+
 }
 
-void updateBall(struct ball *bola)
-{
+void updateBall(struct ball *bola){
+
     bola->preX = bola->x;
     bola->preY = bola->y;
 
@@ -55,10 +56,11 @@ void updateBall(struct ball *bola)
     {
         bola->dirY = -bola->dirY;
     }
+
 }
 
-void printBall(struct ball *bola)
-{
+void printBall(struct ball *bola){
+
     screenSetColor(CYAN, DARKGRAY);
 
     screenGotoxy(bola->preX, bola->preY);
@@ -66,10 +68,11 @@ void printBall(struct ball *bola)
 
     screenGotoxy(bola->x, bola->y);
     printf("%c", bola->simbolo);
+    
 }
 
-void printKey(int ch)
-{
+void printKey(int ch){
+
     screenSetColor(YELLOW, DARKGRAY);
     screenGotoxy(35, 22);
     printf("Key code :");
@@ -84,10 +87,11 @@ void printKey(int ch)
     {
         printf("%d ", readch());
     }
+
 }
 
-int main()
-{
+int main(){
+    
     static int ch = 0;
 
     screenInit(1);
