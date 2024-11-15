@@ -21,6 +21,9 @@ struct ball
     int dirX;
     int dirY;
 
+    int preX;
+    int preY;
+
     char simbolo;
 };
 
@@ -38,6 +41,8 @@ void startBall(struct ball *bola)
 
 void updateBall(struct ball *bola)
 {
+    bola->preX = bola->x;
+    bola->preY = bola->y;
 
     bola->x += bola->dirX;
     bola->y += bola->dirY;
@@ -56,7 +61,7 @@ void printBall(struct ball *bola)
 {
     screenSetColor(CYAN, DARKGRAY);
 
-    screenGotoxy((bola->x - bola->dirX), (bola->y - bola->dirY));
+    screenGotoxy(bola->preX, bola->preY);
     printf(" ");
 
     screenGotoxy(bola->x, bola->y);
@@ -91,6 +96,9 @@ int main()
 
     struct ball bola;
     startBall(&bola);
+    printBall(&bola);
+
+    int startGame = 0;
 
     screenUpdate();
 
@@ -112,7 +120,7 @@ int main()
 
             screenUpdate();
         }
-    }
+        }
 
     keyboardDestroy();
     screenDestroy();
