@@ -1,11 +1,11 @@
 /**
  * SÓ PARA SE BASEAR <-> ORIGINAL
- * 
+ *
  * main.h
  * Created on Aug, 23th 2023
  * Author: Tiago Barros
  * Based on "From C to C++ course - 2002"
-*/
+ */
 
 #include <string.h>
 
@@ -13,19 +13,54 @@
 #include "keyboard.h"
 #include "timer.h"
 
-int a;
-int x = 34, y = 12;
-int incX = 1, incY = 1;
+struct ball
+{
+    int x;
+    int y;
 
-void printHello(int nextX, int nextY)
+    int dirX;
+    int dirY;
+
+    char simbolo;
+};
+
+void startBall(struct ball *bola)
+{
+
+    bola->x = 34;
+    bola->y = 12;
+
+    bola->dirX = 1;
+    bola->dirY = 1;
+
+    bola->simbolo = '𒊹';
+}
+
+void updateBall(struct ball *bola)
+{
+
+    bola->x += bola->dirX;
+    bola->y += bola->dirY;
+
+    if (bola->x <= (MINX + 1) || bola->x >= (MAXX - 1))
+    {
+        bola->dirX = -bola->dirX;
+    }
+    if (bola->y <= (MINY + 1) || bola->y >= (MAXY - 1))
+    {
+        bola->dirY = -bola->dirY;
+    }
+}
+
+void printBall(struct ball *bola)
 {
     screenSetColor(CYAN, DARKGRAY);
-    screenGotoxy(x, y);
-    printf("           ");
-    x = nextX;
-    y = nextY;
-    screenGotoxy(x, y);
-    printf("𒊹");
+
+    screenGotoxy((bola->x - bola->dirX), (bola->y - bola->dirY));
+    printf(" ");
+
+    screenGotoxy(bola->x, bola->y);
+    printf("%c", bola->simbolo);
 }
 
 void printKey(int ch)
@@ -36,17 +71,17 @@ void printKey(int ch)
 
     screenGotoxy(34, 23);
     printf("            ");
-    
-    if (ch == 27) screenGotoxy(36, 23);
-    else screenGotoxy(39, 23);
+
+    screenGotoxy(39, 23);
 
     printf("%d ", ch);
-    while (keyhit()){
+    while (keyhit())
+    {
         printf("%d ", readch());
     }
 }
 
-int main() 
+int main()
 {
     static int ch = 0;
 
@@ -54,29 +89,26 @@ int main()
     keyboardInit();
     timerInit(50);
 
-    printHello(x, y);
+    struct ball bola;
+    startBall(&bola);
+
     screenUpdate();
 
-    while (ch != 10) //enter
+    while (ch != 27) // esc
     {
-        // Handle user input
-        if (keyhit()) 
+
+        if (keyhit())
         {
             ch = readch();
+
             printKey(ch);
             screenUpdate();
         }
 
-        // Update game state (move elements, verify collision, etc)
-        if (timerTimeOver() == 1)
+        if (timerTimeOver())
         {
-            int newX = x + incX;
-            if (newX >= (MAXX -strlen("Hello World") -1) || newX <= MINX+1) incX = -incX;
-            int newY = y + incY;
-            if (newY >= MAXY-1 || newY <= MINY+1) incY = -incY;
-
-            printKey(ch);
-            printHello(newX, newY);
+            updateBall(&bola);
+            printBall(&bola);
 
             screenUpdate();
         }
