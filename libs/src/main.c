@@ -25,7 +25,7 @@ void printHello(int nextX, int nextY)
     x = nextX;
     y = nextY;
     screenGotoxy(x, y);
-    printf("Hello World");
+    printf("𒊹");
 }
 
 void printKey(int ch)
