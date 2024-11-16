@@ -44,8 +44,8 @@ struct bar{
 
 void startBall(struct ball *bola){
 
-    bola->x = 34;
-    bola->y = 12;
+    bola->x = (MAXX/2);
+    bola->y = (MAXY/4);
 
     bola->dirX = 1;
     bola->dirY = 1;
@@ -56,11 +56,12 @@ void startBall(struct ball *bola){
 
 void startBar(struct bar *barra){
 
-    barra->x = (40);
-    barra->y = (10);
+    barra->x = (MAXX/2);
+    barra->y = (MAXY-2);
 
     barra->largura = 10;
     barra->altura = 2;
+    barra->velocidade = 2;
 
 }
 
@@ -84,16 +85,17 @@ void updateBall(struct ball *bola){
 
 void updateBar(struct bar *barra){
 
-    barra->preX = barra->x;
-
-    barra->x += barra->velocidade;
-
     if (keyhit()){
+
         int ch = readch();
 
-        if (ch == '97'){ //a (left)
+        if (ch == 'a' && (barra->x > (MINX+1))){ //se digitar a e estiver menoor que limite
             barra->x -= barra->velocidade;
         }
+        if (ch == 'd' && (barra->x < ((MAXX - barra->largura)-1))){
+            barra->x += barra->velocidade;
+        }
+
     }
 
 }
@@ -110,15 +112,19 @@ void printBall(struct ball *bola){
     
 }
 
-void printBar(struct ball *barra){
+void printBar(struct bar *barra){
 
     screenSetColor(CYAN, WHITE);
 
-    screenGotoxy(barra->preX, barra->preY);
-    printf("     ");
+    for(int i = 0; i < (barra->largura); i++){
+        screenGotoxy((barra->x - barra->velocidade+i), barra->y);
+        printf(" ");
+    } // apagando antiga
 
     screenGotoxy(barra->x, barra->y);
-    printf("――――");
+    for(int j = 0; j < barra->largura; j++){
+        printf("―");
+    }
     
 }
 
@@ -174,9 +180,10 @@ int main(){
 
         if (timerTimeOver())
         {
-            updateBar(&barra);
             updateBall(&bola);
             printBall(&bola);
+            updateBar(&barra);
+            printBar(&barra);
 
             screenUpdate();
         }
