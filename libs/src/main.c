@@ -193,10 +193,21 @@ int main(){
     }
 
     if (gameOver){
-    screenClear();
-    screenGotoxy(35, 12);
-    printf("GAME OVER");
-    screenUpdate();
+        screenClear();
+        screenGotoxy(35, 12);
+        printf("GAME OVER");
+        screenUpdate();
+        if (keyhit()){
+            ch = readch();
+            if (ch == 13){
+                gameOver = 0;
+                startBall(&bola);
+                startBar(&barra);
+                screenClear();
+                printBall(&bola);
+                printBar(&barra);                
+            }
+        }
     }
 
     keyboardDestroy();
