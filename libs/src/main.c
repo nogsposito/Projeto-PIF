@@ -64,7 +64,7 @@ void startBar(struct bar *barra){
 
 }
 
-void updateBall(struct ball *bola){
+void updateBall(struct ball *bola, struct bar *barra, int *gameOver){
 
     bola->preX = bola->x;
     bola->preY = bola->y;
@@ -78,6 +78,14 @@ void updateBall(struct ball *bola){
 
     if (bola->y <= (MINY + 1) || bola->y >= (MAXY - 1)){
         bola->dirY = -bola->dirY;
+    }
+
+    if (bola->y >= MAXY){
+        if (bola->x < barra->x || bola->x > (barra->x + barra->largura)){
+            *gameOver = 1;
+        } else{
+            bola->dirY = -bola->dirY;
+        }
     }
 
 }
@@ -144,6 +152,7 @@ void printKey(int ch){
 int main(){
 
     static int ch = 0;
+    int gameOver = 0;
 
     screenInit(1);
     keyboardInit();
@@ -161,7 +170,7 @@ int main(){
 
     screenUpdate();
 
-    while (ch != 27) // esc
+    while (ch != 27 || !gameOver) // esc ou perde
     {
 
         if (keyhit())
@@ -175,12 +184,20 @@ int main(){
         if (timerTimeOver())
         {
             updateBar(&barra);
-            updateBall(&bola);
+            updateBall(&bola, &barra, &gameOver);
             printBall(&bola);
+            printBar(&barra);
 
             screenUpdate();
         }
-        }
+    }
+
+    if (gameOver){
+    screenClear();
+    screenGotoxy(35, 12);
+    printf("GAME OVER");
+    screenUpdate();
+    }
 
     keyboardDestroy();
     screenDestroy();
