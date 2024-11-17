@@ -1,17 +1,12 @@
-/**
- * SÓ PARA SE BASEAR <-> ORIGINAL
- *
- * main.h
- * Created on Aug, 23th 2023
- * Author: Tiago Barros
- * Based on "From C to C++ course - 2002"
- */
 
 #include <string.h>
 
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
+
+#define NUM_LINHAS 3
+#define NUM_COLUNAS 13
 
 struct ranking{
 
@@ -59,10 +54,15 @@ struct brick{
     int x;
     int y;
 
-    int estado; //0 - quebrado, 1 - ativo
+    int estado; // 1 - ativo, 0 - quebrado
 
     char simbolo;
-    
+
+    int largura;
+    int altura;
+
+    int espacamento;
+
 };
 
 void startBall(struct ball *bola){
@@ -88,6 +88,24 @@ void startBar(struct bar *barra){
 
     barra->preX = barra->x;
 
+}
+
+void startBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS]){
+    for (int i = 0; i < NUM_LINHAS; i++){
+        for (int j =0; j < NUM_COLUNAS; j++){
+
+            tijolos[i][j].largura = 5;
+            tijolos[i][j].altura = 2;
+            tijolos[i][j].espacamento = 1;
+
+            tijolos[i][j].estado = 1;
+
+            tijolos[i][j].simbolo = '#';
+
+            tijolos[i][j].x = (j * (tijolos[i][j].largura + tijolos[i][j].espacamento) + MINX + 1);
+            tijolos[i][j].y = (i * (tijolos[i][j].altura + tijolos[i][j].espacamento)+ MINY + 1);
+        }
+    }
 }
 
 void updateBall(struct ball *bola, struct bar *barra, int *gameOver){
@@ -161,6 +179,22 @@ void printBar(struct bar *barra){
     
 }
 
+void printBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS]) {
+    for (int i = 0; i < NUM_LINHAS; i++) {
+        for (int j = 0; j < NUM_COLUNAS; j++) {
+            if (tijolos[i][j].estado == 1) { // Apenas desenha tijolos ativos
+                for (int h = 0; h < tijolos[i][j].altura; h++) { // desenha altura
+                    screenGotoxy(tijolos[i][j].x, tijolos[i][j].y + h);
+                    for (int w = 0; w < tijolos[i][j].largura; w++) { // desenha largura
+                        printf("%c", tijolos[i][j].simbolo);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 void printKey(int ch){
 
     screenSetColor(YELLOW, DARKGRAY);
@@ -196,6 +230,10 @@ int main(){
     struct bar barra;
     startBar(&barra);
     printBar(&barra);
+
+    struct brick tijolos[NUM_LINHAS][NUM_COLUNAS];
+    startBricks(tijolos);
+    printBricks(tijolos);
 
     int startGame = 0;
 
