@@ -100,7 +100,7 @@ void startBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS]){
 
             tijolos[i][j].estado = 1;
 
-            tijolos[i][j].simbolo = '#';
+            tijolos[i][j].simbolo = '@';
 
             tijolos[i][j].x = (j * (tijolos[i][j].largura + tijolos[i][j].espacamento) + MINX + 1);
             tijolos[i][j].y = (i * (tijolos[i][j].altura + tijolos[i][j].espacamento)+ MINY + 1);
