@@ -61,7 +61,9 @@ void startBar(struct bar *barra){
     barra->velocidade = 2;
 
     barra->x = (MAXX/2) - (barra->largura/2);
-    barra->y = (MAXY-2);
+    barra->y = (MAXY-6);
+
+    barra->preX = barra->x;
 
 }
 
@@ -95,11 +97,7 @@ void updateBall(struct ball *bola, struct bar *barra, int *gameOver){
 
 }
 
-void updateBar(struct bar *barra){
-
-    if (keyhit()){
-
-        int ch = readch();
+void updateBar(struct bar *barra, int ch){
 
         if (ch == 'a' && (barra->x > (MINX+1))){ //se digitar a e estiver menoor que limite
             barra->x -= barra->velocidade;
@@ -107,8 +105,6 @@ void updateBar(struct bar *barra){
         if (ch == 'd' && (barra->x < ((MAXX - barra->largura)-1))){
             barra->x += barra->velocidade;
         }
-
-    }
 
 }
 
@@ -185,23 +181,26 @@ int main(){
     while (ch != 27 && !gameOver) // esc ou perde
     {
 
-        if (keyhit())
-        {
+        if (keyhit()){
+
             ch = readch();
+            updateBar(&barra, ch);
+            printBar(&barra);
 
             printKey(ch);
             screenUpdate();
+
         }
 
-        if (timerTimeOver())
-        {
-            updateBar(&barra);
+        if (timerTimeOver()){
+
             updateBall(&bola, &barra, &gameOver);
 
             printBall(&bola);
             printBar(&barra);
 
             screenUpdate();
+
         }
     }
 
