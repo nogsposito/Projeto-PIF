@@ -56,12 +56,12 @@ void startBall(struct ball *bola){
 
 void startBar(struct bar *barra){
 
-    barra->x = (MAXX/2);
-    barra->y = (MAXY-2);
-
     barra->largura = 10;
     barra->altura = 2;
     barra->velocidade = 2;
+
+    barra->x = (MAXX/2) - (barra->largura/2);
+    barra->y = (MAXY-2);
 
 }
 
@@ -81,12 +81,16 @@ void updateBall(struct ball *bola, struct bar *barra, int *gameOver){
         bola->dirY = -bola->dirY;
     }
 
-    if (bola->y >= MAXY){
-        if (bola->x < barra->x || bola->x > (barra->x + barra->largura)){
-            *gameOver = 1;
-        } else{
+    // bater com barra:
+
+    if (bola->y == (barra->y -1)){
+        if (bola->x >= barra->x && bola->x <= (barra->x + barra->largura - 1)){
             bola->dirY = -bola->dirY;
         }
+    }
+
+    if(bola->y >= MAXY){ // se  bola tiver passado da barra
+        *gameOver = 1;
     }
 
 }
@@ -125,12 +129,14 @@ void printBar(struct bar *barra){
     screenSetColor(CYAN, WHITE);
 
     for(int i = 0; i < (barra->largura); i++){
-        screenGotoxy((barra->x - barra->velocidade+i), barra->y);
+        screenGotoxy((barra->preX + i), barra->y);
         printf(" ");
     } // apagando antiga
 
-    screenGotoxy(barra->x, barra->y);
+    barra->preX = barra->x;
+
     for(int j = 0; j < barra->largura; j++){
+        screenGotoxy((barra->x + j), barra->y);
         printf("―");
     }
     
@@ -176,7 +182,7 @@ int main(){
 
     screenUpdate();
 
-    while (ch != 27 || !gameOver) // esc ou perde
+    while (ch != 27 && !gameOver) // esc ou perde
     {
 
         if (keyhit())
@@ -191,6 +197,7 @@ int main(){
         {
             updateBar(&barra);
             updateBall(&bola, &barra, &gameOver);
+
             printBall(&bola);
             printBar(&barra);
 
@@ -199,21 +206,33 @@ int main(){
     }
 
     if (gameOver){
+
         screenClear();
-        screenGotoxy(35, 12);
+        screenGotoxy((MAXX/2 - 5), (MAXY/2));
         printf("GAME OVER");
         screenUpdate();
-        if (keyhit()){
-            ch = readch();
-            if (ch == 13){
-                gameOver = 0;
-                startBall(&bola);
-                startBar(&barra);
-                screenClear();
-                printBall(&bola);
-                printBar(&barra);                
+
+        while(ch != 27){
+
+            if (keyhit()){
+
+                ch = readch();
+
+                if (ch == 13){
+
+                    gameOver = 0;
+                    startBall(&bola);
+                    startBar(&barra);
+                    screenClear();
+                    printBall(&bola);
+                    printBar(&barra);  
+                    break;              
+                }
+
             }
+
         }
+
     }
 
     keyboardDestroy();
