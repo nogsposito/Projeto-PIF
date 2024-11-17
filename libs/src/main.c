@@ -68,7 +68,7 @@ struct brick{
 void startBall(struct ball *bola){
 
     bola->x = (MAXX/2);
-    bola->y = (MAXY/4);
+    bola->y = (MAXY/2); // consertar posicao inicial;
 
     bola->dirX = 1;
     bola->dirY = 1;
@@ -180,14 +180,19 @@ void printBar(struct bar *barra){
 }
 
 void printBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS]) {
+
     for (int i = 0; i < NUM_LINHAS; i++) {
         for (int j = 0; j < NUM_COLUNAS; j++) {
-            if (tijolos[i][j].estado == 1) { // Apenas desenha tijolos ativos
-                for (int h = 0; h < tijolos[i][j].altura; h++) { // desenha altura
-                    screenGotoxy(tijolos[i][j].x, tijolos[i][j].y + h);
-                    for (int w = 0; w < tijolos[i][j].largura; w++) { // desenha largura
-                        printf("%c", tijolos[i][j].simbolo);
+
+            if (tijolos[i][j].estado == 1) { // CASO ESTIVER ATIVO!
+
+                for (int h = 0; h < tijolos[i][j].altura; h++) {
+                    screenGotoxy(tijolos[i][j].x, tijolos[i][j].y + h); // para a altura do bloco (vai pro x e y e soma h (0, 1, 2) calculando p lugar certo)
+
+                    for (int w = 0; w < tijolos[i][j].largura; w++) {
+                        printf("%c", tijolos[i][j].simbolo); // printa um após o outro na largura
                     }
+
                 }
             }
         }
@@ -195,7 +200,7 @@ void printBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS]) {
 }
 
 
-void printKey(int ch){
+void printKey(int ch){ // adaptar para score/tempo
 
     screenSetColor(YELLOW, DARKGRAY);
     screenGotoxy(35, 22);
