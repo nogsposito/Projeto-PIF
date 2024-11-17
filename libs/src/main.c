@@ -13,6 +13,18 @@
 #include "keyboard.h"
 #include "timer.h"
 
+struct ranking{
+
+    char nome[50];
+    char sobrenome[50];
+
+    int tijolosQuebrados;
+    int tempo;
+
+    struct ranking *proximo;
+
+};
+
 struct ball{
 
     int x;
@@ -40,6 +52,17 @@ struct bar{
     int largura;
     int altura;
 
+};
+
+struct brick{
+
+    int x;
+    int y;
+
+    int estado; //0 - quebrado, 1 - ativo
+
+    char simbolo;
+    
 };
 
 void startBall(struct ball *bola){
@@ -178,8 +201,7 @@ int main(){
 
     screenUpdate();
 
-    while (ch != 27 && !gameOver) // esc ou perde
-    {
+    while (ch != 27 && !gameOver){ // esc ou perde
 
         if (keyhit()){
 
