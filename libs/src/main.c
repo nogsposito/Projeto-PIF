@@ -266,19 +266,6 @@ void printBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS]) {
 
                 }
             } 
-            
-            if (tijolos[i][j].estado == 0){
-
-                for (int h = 0; h < tijolos[i][j].altura; h++){
-
-                    screenGotoxy(tijolos[i][j].x, (tijolos[i][j].y + h));
-
-                    for (int w = 0; w < tijolos[i][j].largura; j++){
-                        printf(" ");
-                    }
-                }
-
-            }
         }
     }
 }
