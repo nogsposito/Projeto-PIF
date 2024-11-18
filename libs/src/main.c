@@ -20,6 +20,52 @@ struct ranking{
 
 };
 
+void addRanking(struct ranking **head, char *nome, char *sobrenome, int tijolosQuebrados, int tempo){
+    struct ranking *novo;
+    novo = (struct ranking *)malloc(sizeof(struct ranking));
+    
+    strcpy(novo->nome, nome);
+    strcpy(novo->sobrenome, sobrenome);
+    novo->tijolosQuebrados = tijolosQuebrados;
+    novo->tempo = tempo;
+    novo->proximo = NULL;
+
+    struct ranking *atual;
+    atual = *head;
+    struct ranking *temp;
+    temp = NULL;
+
+    while (atual != NULL && atual->tijolosQuebrados > tijolosQuebrados){
+        temp = atual;
+        atual = atual->proximo;
+    }
+    
+    if (temp == NULL){
+        novo->proximo = *head;
+        *head = novo;
+    } else{
+        temp->proximo = novo;
+        novo->proximo = atual;
+    }
+}
+
+void rankingArquivo(struct ranking *head){
+    FILE *fptr = fopen("ranking.txt", "w");
+    
+    if (fptr == NULL) {
+        printf("Arquivo não encontrado\n");
+        exit(1);
+    }
+    
+    struct ranking *atual = head;
+    while (atual != NULL){
+        fprintf(fptr, "%s %s %d %d\n", atual->nome, atual->sobrenome, atual->tijolosQuebrados, atual->tempo);
+        atual = atual->proximo;
+    }
+
+    fclose(fptr);
+}
+
 struct ball{
 
     int x;
