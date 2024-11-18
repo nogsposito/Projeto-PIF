@@ -182,6 +182,7 @@ void updateBall(struct ball *bola, struct bar *barra, int *gameOver){
         *gameOver = 1;
     }
 
+
 }
 
 void updateBar(struct bar *barra, int ch){
@@ -259,7 +260,7 @@ void printBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS]) {
                 for (int h = 0; h < tijolos[i][j].altura; h++) {
                     screenGotoxy(tijolos[i][j].x, tijolos[i][j].y + h);
                     for (int w = 0; w < tijolos[i][j].largura; w++) {
-                        printf(" "); // Espaços para "apagar" o tijolo
+                        printf(" ");
                     }
                 }
             }
