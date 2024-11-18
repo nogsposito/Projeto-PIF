@@ -149,6 +149,30 @@ void updateBar(struct bar *barra, int ch){
 
 }
 
+void updateBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS], struct ball *bola){
+
+    for (int i = 0; i < NUM_LINHAS; i++){
+        for (int j = 0; j < NUM_COLUNAS; j++){
+
+            if (tijolos[i][j].estado == 1){ //colisao horizontal
+                if ((bola->x >= tijolos[i][j].x) && (bola->x < tijolos[i][j].x + tijolos[i][j].largura) && bola->y == tijolos[i][j].y){ // ==?
+                    bola->dirY = -(bola->dirY); // se bater de lado deve voltar para o lado oposto
+                    tijolos[i][j].estado = 0;
+                }
+            }
+
+            if (tijolos[i][j].estado == 1){ //colisao vertical
+                if ((bola->y >= tijolos[i][j].y) && (bola->y < tijolos[i][j].y + tijolos[i][j].altura) && bola->x == tijolos[i][j].x){
+                    bola->dirX = -(bola->dirX); // se bater de baixo bola precisa voltar para baixo
+                    tijolos[i][j].estado = 0;
+                }
+            }
+
+        }
+    }
+
+}
+
 void printBall(struct ball *bola){
 
     screenSetColor(CYAN, DARKGRAY);
@@ -260,9 +284,12 @@ int main(){
         if (timerTimeOver()){
 
             updateBall(&bola, &barra, &gameOver);
+            updateBricks(tijolos, &bola);
 
             printBall(&bola);
             printBar(&barra);
+            
+            printBricks(tijolos);
 
             screenUpdate();
 
