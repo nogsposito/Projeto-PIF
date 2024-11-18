@@ -51,7 +51,7 @@ void addRanking(struct ranking **head, char *nome, char *sobrenome, int tijolosQ
 
 void rankingArquivo(struct ranking *head){
     FILE *fptr = fopen("ranking.txt", "w");
-    
+
     if (fptr == NULL) {
         printf("Arquivo não encontrado\n");
         exit(1);
@@ -288,6 +288,9 @@ int main(){
 
     int startGame = 0;
 
+    struct ranking *head;
+    head = NULL;
+
     screenUpdate();
 
     while (ch != 27 && !gameOver){ // esc ou perde
@@ -317,9 +320,17 @@ int main(){
 
     if (gameOver){
 
+        struct ranking player;
+
         screenClear();
         screenGotoxy((MAXX/2 - 5), (MAXY/2));
         printf("GAME OVER");
+        printf("insira seu nome e sobrenome: \n");
+        scanf("%s %s", player.nome, player.sobrenome);
+        
+        adicionarRanking(&head, player.nome, player.sobrenome, player.tijolosQuebrados, player.tempo);
+        salvarRanking(head);
+
         screenUpdate();
 
         while(ch != 27){
