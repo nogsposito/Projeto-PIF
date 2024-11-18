@@ -326,8 +326,6 @@ int main(){
     struct ranking *head;
     head = NULL;
 
-    timerUpdateTimer(0);
-
     screenUpdate();
 
     while (ch != 27 && !gameOver){ // esc ou perde
@@ -362,15 +360,11 @@ int main(){
 
         struct ranking player;
 
-        int tempoJogo = getTimeDiff();
-
         screenClear();
         screenGotoxy((MAXX/2 - 5), (MAXY/2));
         printf("GAME OVER");
         printf("insira seu nome e sobrenome: \n");
         scanf("%s %s", player.nome, player.sobrenome);
-
-        player.tempo = tempoJogo / 1000.0;
         
         adicionarRanking(&head, player.nome, player.sobrenome, player.tijolosQuebrados, player.tempo);
         salvarRanking(head);
@@ -391,7 +385,6 @@ int main(){
                     screenClear();
                     printBall(&bola);
                     printBar(&barra);  
-                    timerUpdateTimer(0);
                     break;              
                 }
 
