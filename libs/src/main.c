@@ -334,7 +334,7 @@ int main(){
 
             printBall(&bola);
             printBar(&barra);
-            
+
             printBricks(tijolos);
 
             screenUpdate();
