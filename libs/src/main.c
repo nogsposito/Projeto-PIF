@@ -200,20 +200,19 @@ void updateBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS], struct ball *bo
     for (int i = 0; i < NUM_LINHAS; i++){
         for (int j = 0; j < NUM_COLUNAS; j++){
 
-            if (tijolos[i][j].estado == 1){ //colisao horizontal
-                if ((bola->x >= tijolos[i][j].x) && (bola->x < tijolos[i][j].x + tijolos[i][j].largura) && bola->y == tijolos[i][j].y){ // ==?
+            if (tijolos[i][j].estado == 1){ 
+
+                if ((bola->x >= tijolos[i][j].x) && (bola->x < tijolos[i][j].x + tijolos[i][j].largura) && bola->y == tijolos[i][j].y){ // colisao horizontal
                     bola->dirY = -(bola->dirY); // se bater de lado deve voltar para o lado oposto
                     tijolos[i][j].estado = 0;
                 }
-            }
 
-            if (tijolos[i][j].estado == 1){ //colisao vertical
-                if ((bola->y >= tijolos[i][j].y) && (bola->y < tijolos[i][j].y + tijolos[i][j].altura) && bola->x == tijolos[i][j].x){
+                if ((bola->y >= tijolos[i][j].y) && (bola->y < tijolos[i][j].y + tijolos[i][j].altura) && bola->x == tijolos[i][j].x){ // colisao vertical
                     bola->dirX = -(bola->dirX); // se bater de baixo bola precisa voltar para baixo
                     tijolos[i][j].estado = 0;
                 }
+                
             }
-
         }
     }
 
@@ -253,6 +252,15 @@ void printBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS]) {
 
     for (int i = 0; i < NUM_LINHAS; i++) {
         for (int j = 0; j < NUM_COLUNAS; j++) {
+
+            if (tijolos[i][j].estado == 0) {
+                for (int h = 0; h < tijolos[i][j].altura; h++) {
+                    screenGotoxy(tijolos[i][j].x, tijolos[i][j].y + h);
+                    for (int w = 0; w < tijolos[i][j].largura; w++) {
+                        printf(" "); // Espaços para "apagar" o tijolo
+                    }
+                }
+            }
 
             if (tijolos[i][j].estado == 1) { // CASO ESTIVER ATIVO!
 
