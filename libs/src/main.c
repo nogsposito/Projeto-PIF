@@ -195,7 +195,7 @@ void updateBar(struct bar *barra, int ch){
 
 }
 
-void updateBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS], struct ball *bola){
+void updateBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS], struct ball *bola, struct ranking *jogador){
 
     for (int i = 0; i < NUM_LINHAS; i++){
         for (int j = 0; j < NUM_COLUNAS; j++){
@@ -205,11 +205,13 @@ void updateBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS], struct ball *bo
                 if ((bola->x >= tijolos[i][j].x) && (bola->x < tijolos[i][j].x + tijolos[i][j].largura) && bola->y == tijolos[i][j].y){ // colisao horizontal
                     bola->dirY = -(bola->dirY); // se bater de lado deve voltar para o lado oposto
                     tijolos[i][j].estado = 0;
+                    jogador->tijolosQuebrados += 1;
                 }
 
                 if ((bola->y >= tijolos[i][j].y) && (bola->y < tijolos[i][j].y + tijolos[i][j].altura) && bola->x == tijolos[i][j].x){ // colisao vertical
                     bola->dirX = -(bola->dirX); // se bater de baixo bola precisa voltar para baixo
                     tijolos[i][j].estado = 0;
+                    jogador->tijolosQuebrados += 1;
                 }
                 
             }
@@ -324,6 +326,8 @@ int main(){
     struct ranking *head;
     head = NULL;
 
+    timerUpdateTimer(0);
+
     screenUpdate();
 
     while (ch != 27 && !gameOver){ // esc ou perde
@@ -342,7 +346,7 @@ int main(){
         if (timerTimeOver()){
 
             updateBall(&bola, &barra, &gameOver);
-            updateBricks(tijolos, &bola);
+            updateBricks(tijolos, &bola, &head);
 
             printBall(&bola);
             printBar(&barra);
@@ -358,11 +362,15 @@ int main(){
 
         struct ranking player;
 
+        int tempoJogo = getTimeDiff();
+
         screenClear();
         screenGotoxy((MAXX/2 - 5), (MAXY/2));
         printf("GAME OVER");
         printf("insira seu nome e sobrenome: \n");
         scanf("%s %s", player.nome, player.sobrenome);
+
+        player.tempo = tempoJogo / 1000.0;
         
         adicionarRanking(&head, player.nome, player.sobrenome, player.tijolosQuebrados, player.tempo);
         salvarRanking(head);
@@ -383,6 +391,7 @@ int main(){
                     screenClear();
                     printBall(&bola);
                     printBar(&barra);  
+                    timerUpdateTimer(0);
                     break;              
                 }
 
