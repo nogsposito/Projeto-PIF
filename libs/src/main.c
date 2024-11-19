@@ -422,6 +422,11 @@ int main(){
         if (keyhit()){
 
             ch = readch();
+
+            if (ch == 'a' || ch == 'd') {
+                startGame = 1;
+            }
+
             updateBar(&barra, ch);
             printBar(&barra);
 
@@ -430,17 +435,21 @@ int main(){
 
         }
 
-        if (timerTimeOver()){
+        if (startGame == 1){
 
-            updateBall(&bola, &barra, &gameOver);
-            updateBricks(tijolos, &bola, &head);
+            if (timerTimeOver()){
 
-            printBall(&bola);
-            printBar(&barra);
+                updateBall(&bola, &barra, &gameOver);
+                updateBricks(tijolos, &bola, &head);
 
-            printBricks(tijolos);
+                printBall(&bola);
+                printBar(&barra);
 
-            screenUpdate();
+                printBricks(tijolos);
+
+                screenUpdate();
+
+            }
 
         }
     }
@@ -461,7 +470,7 @@ int main(){
 
         salvarRanking(head, "ranking.txt");
 
-        // display ranking
+        mostrarRanking(head);
 
         liberarRanking(head);
 
