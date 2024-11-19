@@ -35,7 +35,7 @@ void addRanking(struct ranking **head, char *nome, char *sobrenome, int tijolosQ
     struct ranking *temp;
     temp = NULL;
 
-    while (atual != NULL && atual->tijolosQuebrados > tijolosQuebrados){
+    while (atual != NULL && (atual->tijolosQuebrados > tijolosQuebrados || (atual->tijolosQuebrados == tijolosQuebrados && atual->tempo > tempo))) {
         temp = atual;
         atual = atual->proximo;
     }
