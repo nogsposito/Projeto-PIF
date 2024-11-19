@@ -281,8 +281,8 @@ void updateBar(struct bar *barra, int ch){
         }
 
 }
-
-void updateBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS], struct ball *bola, struct ranking *jogador) {
+//antes struct ranking *jogador
+void updateBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS], struct ball *bola, int *tijolosQuebrados) {
 
     for (int i = 0; i < NUM_LINHAS; i++) {
         for (int j = 0; j < NUM_COLUNAS; j++) {
@@ -304,7 +304,8 @@ void updateBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS], struct ball *bo
                 }
 
                 tijolos[i][j].estado = 0; 
-                jogador->tijolosQuebrados++;
+                //jogador->tijolosQuebrados++;
+                (*tijolosQuebrados)++;
             }
         }
     }
