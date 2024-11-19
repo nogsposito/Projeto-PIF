@@ -201,7 +201,7 @@ void updateBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS], struct ball *bo
     for (int i = 0; i < NUM_LINHAS; i++) {
         for (int j = 0; j < NUM_COLUNAS; j++) {
 
-            if (tijolos[i][j].estado == 0) { // se ja quebrou, pular
+            if (tijolos[i][j].estado == 0) { 
                 continue;
             }
             
@@ -217,7 +217,7 @@ void updateBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS], struct ball *bo
 
                 }
 
-                tijolos[i][j].estado = 0; // tijolo marcado como inativo
+                tijolos[i][j].estado = 0; 
                 jogador->tijolosQuebrados++;
             }
         }
