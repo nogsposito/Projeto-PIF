@@ -1,5 +1,6 @@
 
 #include <string.h>
+#include <stdio.h>
 
 #include "screen.h"
 #include "keyboard.h"
@@ -20,50 +21,115 @@ struct ranking{
 
 };
 
-void addRanking(struct ranking **head, char *nome, char *sobrenome, int tijolosQuebrados, int tempo){
-    struct ranking *novo;
-    novo = (struct ranking *)malloc(sizeof(struct ranking));
-    
+void inserirRanking(struct ranking **head, char *nome, char *sobrenome, int tijolosQuebrados, float tempo) {
+
+    struct ranking *novo = (struct ranking *)malloc(sizeof(struct ranking));
+
     strcpy(novo->nome, nome);
     strcpy(novo->sobrenome, sobrenome);
     novo->tijolosQuebrados = tijolosQuebrados;
     novo->tempo = tempo;
     novo->proximo = NULL;
 
-    struct ranking *atual;
-    atual = *head;
-    struct ranking *temp;
-    temp = NULL;
+    struct ranking *atual = *head;
+    struct ranking *anterior = NULL;
 
-    while (atual != NULL && (atual->tijolosQuebrados > tijolosQuebrados || (atual->tijolosQuebrados == tijolosQuebrados && atual->tempo > tempo))) {
-        temp = atual;
+    while (atual != NULL) {
+
+    if (atual->tijolosQuebrados > tijolosQuebrados) { // prioriza tijolos
+
+        anterior = atual;
         atual = atual->proximo;
+
+    } else if (atual->tijolosQuebrados == tijolosQuebrados && atual->tempo < tempo) { // tempo como criterio de desempate
+
+        anterior = atual;
+        atual = atual->proximo;
+
+    } else {
+
+        break;
+
     }
-    
-    if (temp == NULL){
-        novo->proximo = *head;
+}
+
+    if (anterior == NULL) {
+        novo->proximo = *head; // se nao existir anterior
         *head = novo;
-    } else{
-        temp->proximo = novo;
+    } else {
+        anterior->proximo = novo; 
         novo->proximo = atual;
     }
 }
 
-void rankingArquivo(struct ranking *head){
-    FILE *fptr = fopen("ranking.txt", "w");
+struct ranking *arquivoParaLista(char *arquivo) {
 
-    if (fptr == NULL) {
-        printf("Arquivo não encontrado\n");
-        exit(1);
+    FILE *arquivo = fopen(arquivo, "r");
+
+    if (arquivo == NULL) {
+        return NULL;
     }
-    
+
+    struct ranking *head = NULL;
+    struct ranking *atual = NULL;
+
+    char nome[50];
+    char sobrenome[50];
+    int tijolosQuebrados;
+    float tempo;
+
+    while (fscanf(arquivo, "%s %s %d %f", nome, sobrenome, &tijolosQuebrados, &tempo) != EOF) {
+
+        struct ranking *novo = (struct ranking *)malloc(sizeof(struct ranking));
+
+        strcpy(novo->nome, nome);
+        strcpy(novo->sobrenome, sobrenome);
+        novo->tijolosQuebrados = tijolosQuebrados;
+        novo->tempo = tempo;
+
+        novo->proximo = NULL;
+
+        if (head == NULL) {
+            head = novo;
+            atual = novo;
+        } else {
+            atual->proximo = novo;
+            atual = novo;
+        }
+    }
+
+    fclose(arquivo);
+    return head;
+}
+
+void salvarRanking(struct ranking *head, char *arquivo) {
+
+    FILE *arquivo = fopen(arquivo, "w");
+
+    if (arquivo == NULL) {
+        return;
+    }
+
     struct ranking *atual = head;
-    while (atual != NULL){
-        fprintf(fptr, "%s %s %d %d\n", atual->nome, atual->sobrenome, atual->tijolosQuebrados, atual->tempo);
+
+    while (atual != NULL) {
+        fprintf(arquivo, "%s %s %d %d\n", atual->nome, atual->sobrenome, atual->tijolosQuebrados, atual->tempo);
         atual = atual->proximo;
     }
 
-    fclose(fptr);
+    fclose(arquivo);
+}
+
+void freeLista(struct ranking *head) {
+
+    struct ranking *temp;
+
+    while (head != NULL) {
+        temp = head;
+        head = head->proximo;
+        free(temp);
+    }
+    
 }
 
 struct ball{
@@ -364,6 +430,8 @@ int main(){
 
         struct ranking player;
 
+        struct ranking *head = carregarRanking("ranking.txt");
+
         screenClear();
         screenGotoxy((MAXX/2 - 5), (MAXY/2));
         printf("GAME OVER");
@@ -371,7 +439,12 @@ int main(){
         scanf("%s %s", player.nome, player.sobrenome);
         
         adicionarRanking(&head, player.nome, player.sobrenome, player.tijolosQuebrados, player.tempo);
-        salvarRanking(head);
+
+        salvarRanking(head, "ranking.txt");
+
+        // display ranking
+
+        liberarRanking(head);
 
         screenUpdate();
 
