@@ -12,8 +12,8 @@
 
 struct ranking{
 
-    char nome[50];
-    char sobrenome[50];
+    char nome[51];
+    char sobrenome[51];
 
     int tijolosQuebrados;
     int tempo;
@@ -111,9 +111,9 @@ void inserirRanking(struct ranking **head, char *nome, char *sobrenome, int tijo
 
 struct ranking *arquivoParaLista(char *arquivo) {
 
-    FILE *arquivo = fopen(arquivo, "r");
+    FILE *fptr = fopen(arquivo, "r");
 
-    if (arquivo == NULL) {
+    if (fptr == NULL) {
         return NULL;
     }
 
@@ -125,7 +125,7 @@ struct ranking *arquivoParaLista(char *arquivo) {
     int tijolosQuebrados;
     float tempo;
 
-    while (fscanf(arquivo, "%s %s %d %f", nome, sobrenome, &tijolosQuebrados, &tempo) != EOF) {
+    while (fscanf(fptr, "%s %s %d %f", nome, sobrenome, &tijolosQuebrados, &tempo) != EOF) {
 
         struct ranking *novo = (struct ranking *)malloc(sizeof(struct ranking));
 
@@ -145,26 +145,26 @@ struct ranking *arquivoParaLista(char *arquivo) {
         }
     }
 
-    fclose(arquivo);
+    fclose(fptr);
     return head;
 }
 
 void salvarRanking(struct ranking *head, char *arquivo) {
 
-    FILE *arquivo = fopen(arquivo, "w");
+    FILE *fptr = fopen(arquivo, "w");
 
-    if (arquivo == NULL) {
+    if (fptr == NULL) {
         return;
     }
 
     struct ranking *atual = head;
 
     while (atual != NULL) {
-        fprintf(arquivo, "%s %s %d %d\n", atual->nome, atual->sobrenome, atual->tijolosQuebrados, atual->tempo);
+        fprintf(fptr, "%s %s %d %d\n", atual->nome, atual->sobrenome, atual->tijolosQuebrados, atual->tempo);
         atual = atual->proximo;
     }
 
-    fclose(arquivo);
+    fclose(fptr);
 }
 
 void freeLista(struct ranking *head) {
@@ -420,85 +420,116 @@ int main() {
 
     screenUpdate();
 
-    while (ch != 27 && !gameOver) {
-        if (keyhit()) {
-            ch = readch();
+    while(1){
 
-            if (ch == 'a' || ch == 'd') {
-                startGame = 1;
-            }
+        while (ch != 27 && !gameOver) {
 
-            updateBar(&barra, ch);
-            printBar(&barra);
-            screenUpdate();
-        }
-
-        if (startGame == 1) {
-            if (timerTimeOver()) {
-                tempo++;
-
-                updateBall(&bola, &barra, &gameOver);
-                updateBricks(tijolos, &bola, &tijolosQuebrados);
-
-                printBall(&bola);
-                printBar(&barra);
-                printBricks(tijolos);
-
-                screenUpdate();
-            }
-        }
-    }
-
-    if (gameOver){
-
-        struct ranking player = {0};
-
-        screenClear();
-        screenGotoxy((MAXX/2 - 5), (MAXY/2));
-        printf("GAME OVER");
-        printf("insira seu nome e sobrenome: \n");
-        scanf("%s %s", player.nome, player.sobrenome);
-        
-        adicionarRanking(&head, player.nome, player.sobrenome, player.tijolosQuebrados, player.tempo);
-
-        salvarRanking(head, "ranking.txt");
-
-        mostrarRanking(head);
-
-        liberarRanking(head);
-
-        screenUpdate();
-
-        while(ch != 27){
-
-            if (keyhit()){
-
+            if (keyhit()) {
                 ch = readch();
 
-                if (ch == 13){
-
-                    gameOver = 0;
-
-                    startBall(&bola);
-                    startBar(&barra);
-                    
-                    screenClear();
-
-                    printBall(&bola);
-                    printBar(&barra);  
-
-                    break;              
+                if (ch == 'a' || ch == 'd') {
+                    startGame = 1;
                 }
 
+                updateBar(&barra, ch);
+                printBar(&barra);
+                screenUpdate();
             }
 
+            if (startGame == 1) {
+                if (timerTimeOver()) {
+                    tempo++;
+
+                    updateBall(&bola, &barra, &gameOver);
+                    updateBricks(tijolos, &bola, &tijolosQuebrados);
+
+                    printBall(&bola);
+                    printBar(&barra);
+                    printBricks(tijolos);
+
+                    screenUpdate();
+                }
+            }
         }
 
-    }
+        if (gameOver){
+            screenClear();
 
-    keyboardDestroy();
-    screenDestroy();
-    timerDestroy();
+            screenSetColor(RED, DARKGRAY);
+            screenGotoxy((MAXX/2 - 5), (MAXY/2 - 3));
+            printf("GAME OVER");
+
+            screenSetColor(YELLOW, DARKGRAY);
+            screenGotoxy((MAXX/2 - 15), (MAXY/2 - 1));
+            printf("Tijolos quebrados: %d (%d)", tijolosQuebrados, tempo);
+
+            
+            struct ranking player = {0};
+            char nome[51] = {0};
+            char sobrenome[51] = {0};
+
+            screenSetColor(GREEN, DARKGRAY);
+            screenGotoxy((MAXX/2 - 20), (MAXY/2 + 1));
+            printf("Digite seu nome: ");
+            screenShowCursor();
+            
+            while(keyhit()){
+                readch();
+            }
+
+            screenSetColor(WHITE, DARKGRAY);
+            screenGotoxy((MAXX/2 - 20), (MAXY/2 + 2));
+            scanf("%50s", nome);
+
+            screenGotoxy((MAXX/2 - 20), (MAXY/2 + 3));
+            printf("Digite seu sobrenome: ");
+            scanf("%50s", sobrenome);
+
+            screenHideCursor();
+
+            strcpy(player.nome, nome);
+            strcpy(player.sobrenome, sobrenome);
+            player.tijolosQuebrados = tijolosQuebrados;
+            player.tempo = tempo;
+            
+            inserirRanking(&head, player.nome, player.sobrenome, player.tijolosQuebrados, player.tempo);
+            salvarRanking(head, "ranking.txt");
+
+            // Mostrar ranking
+            screenClear();
+            displayRanking(head);
+
+            screenSetColor(YELLOW, DARKGRAY);
+            screenGotoxy((MAXX/2 - 20), (MAXY/2 + 10));
+            printf("Pressione ENTER para reiniciar");
+            screenUpdate();
+
+            // Esperar tecla para reiniciar
+            while(1) {
+                if (keyhit()) {
+                    ch = readch();
+                    if (ch == 13) break; // ENTER
+                    if (ch == 27) {
+                        // Limpar memória e sair
+                        freeLista(head);
+                        keyboardDestroy();
+                        screenDestroy();
+                        timerDestroy();
+                        return 0;
+                    }
+                }
+            }
+        }
+
+        // Se ESC for pressionado, sair do jogo
+        if (ch == 27) {
+            freeLista(head);
+            keyboardDestroy();
+            screenDestroy();
+            timerDestroy();
+            break;
+        }
+    }
 
     return 0;
 }
