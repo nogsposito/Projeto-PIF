@@ -21,6 +21,52 @@ struct ranking{
 
 };
 
+
+struct ball{
+
+    int x;
+    int y;
+
+    int dirX;
+    int dirY;
+
+    int preX;
+    int preY;
+
+    char simbolo;
+
+};
+
+struct bar{
+
+    int y; // y fixo
+
+    int x;
+    int preX;
+
+    int velocidade;
+
+    int largura;
+    int altura;
+
+};
+
+struct brick{
+
+    int x;
+    int y;
+
+    int estado; // 1 - ativo, 0 - quebrado
+
+    char simbolo;
+
+    int largura;
+    int altura;
+
+    int espacamento;
+
+};
+
 void inserirRanking(struct ranking **head, char *nome, char *sobrenome, int tijolosQuebrados, float tempo) {
 
     struct ranking *novo = (struct ranking *)malloc(sizeof(struct ranking));
@@ -36,22 +82,22 @@ void inserirRanking(struct ranking **head, char *nome, char *sobrenome, int tijo
 
     while (atual != NULL) {
 
-    if (atual->tijolosQuebrados > tijolosQuebrados) { // prioriza tijolos
+        if (atual->tijolosQuebrados > tijolosQuebrados) { // prioriza tijolos
 
-        anterior = atual;
-        atual = atual->proximo;
+            anterior = atual;
+            atual = atual->proximo;
 
-    } else if (atual->tijolosQuebrados == tijolosQuebrados && atual->tempo < tempo) { // tempo como criterio de desempate
+        } else if (atual->tijolosQuebrados == tijolosQuebrados && atual->tempo < tempo) { // tempo como criterio de desempate
 
-        anterior = atual;
-        atual = atual->proximo;
+            anterior = atual;
+            atual = atual->proximo;
 
-    } else {
+        } else {
 
-        break;
+            break;
 
+        }
     }
-}
 
     if (anterior == NULL) {
         novo->proximo = *head; // se nao existir anterior
@@ -132,50 +178,23 @@ void freeLista(struct ranking *head) {
     
 }
 
-struct ball{
+void displayRanking(struct ranking *head) {
 
-    int x;
-    int y;
+    struct ranking *atual = head;
+    int posicao = 1;
 
-    int dirX;
-    int dirY;
+    printf("\n-*-*- PLACAR -*-*-\n");
 
-    int preX;
-    int preY;
+    while (atual != NULL && posicao <= 10) { // 10 primeiros
 
-    char simbolo;
+        printf("%d. %s %s - TIJOLOS QUEBRADOS: %d TEMPO: %d\n", posicao, atual->nome, atual->sobrenome, atual->tijolosQuebrados, atual->tempo);
+        
+        atual = atual->proximo;
+        posicao++;
 
-};
+    }
+}
 
-struct bar{
-
-    int y; // y fixo
-
-    int x;
-    int preX;
-
-    int velocidade;
-
-    int largura;
-    int altura;
-
-};
-
-struct brick{
-
-    int x;
-    int y;
-
-    int estado; // 1 - ativo, 0 - quebrado
-
-    char simbolo;
-
-    int largura;
-    int altura;
-
-    int espacamento;
-
-};
 
 void startBall(struct ball *bola){
 
