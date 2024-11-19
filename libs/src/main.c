@@ -390,10 +390,15 @@ void printKey(int ch){ // adaptar para score/tempo
 
 }
 
-int main(){
+
+
+int main() {
 
     static int ch = 0;
     int gameOver = 0;
+    int tijolosQuebrados = 0;
+    int startGame = 0;
+    int tempo = 0;
 
     screenInit(1);
     keyboardInit();
@@ -411,16 +416,12 @@ int main(){
     startBricks(tijolos);
     printBricks(tijolos);
 
-    int startGame = 0;
-
-    struct ranking *head = NULL;
+    struct ranking *head = arquivoParaLista("ranking.txt");
 
     screenUpdate();
 
-    while (ch != 27 && !gameOver){ // esc ou perde
-
-        if (keyhit()){
-
+    while (ch != 27 && !gameOver) {
+        if (keyhit()) {
             ch = readch();
 
             if (ch == 'a' || ch == 'd') {
@@ -429,28 +430,22 @@ int main(){
 
             updateBar(&barra, ch);
             printBar(&barra);
-
-            printKey(ch);
             screenUpdate();
-
         }
 
-        if (startGame == 1){
-
-            if (timerTimeOver()){
+        if (startGame == 1) {
+            if (timerTimeOver()) {
+                tempo++;
 
                 updateBall(&bola, &barra, &gameOver);
-                updateBricks(tijolos, &bola, &head);
+                updateBricks(tijolos, &bola, &tijolosQuebrados);
 
                 printBall(&bola);
                 printBar(&barra);
-
                 printBricks(tijolos);
 
                 screenUpdate();
-
             }
-
         }
     }
 
@@ -483,11 +478,15 @@ int main(){
                 if (ch == 13){
 
                     gameOver = 0;
+
                     startBall(&bola);
                     startBar(&barra);
+                    
                     screenClear();
+
                     printBall(&bola);
                     printBar(&barra);  
+
                     break;              
                 }
 
