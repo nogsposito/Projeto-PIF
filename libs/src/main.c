@@ -466,7 +466,7 @@ int main() {
 
             
             struct ranking player = {0};
-            char nome[51] = {0};
+            char nome[51] = NULL;
             char sobrenome[51] = {0};
 
             screenSetColor(GREEN, DARKGRAY);
