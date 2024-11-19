@@ -1,6 +1,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "screen.h"
 #include "keyboard.h"
@@ -263,7 +264,7 @@ void updateBall(struct ball *bola, struct bar *barra, int *gameOver){
         }
     }
 
-    if(bola->y >= MAXY){ // se  bola tiver passado da barra
+    if (bola->y >= (MAXY - 2)) {
         *gameOver = 1;
     }
 
@@ -412,8 +413,7 @@ int main(){
 
     int startGame = 0;
 
-    struct ranking *head;
-    head = NULL;
+    struct ranking *head = NULL;
 
     screenUpdate();
 
@@ -456,9 +456,7 @@ int main(){
 
     if (gameOver){
 
-        struct ranking player;
-
-        struct ranking *head = carregarRanking("ranking.txt");
+        struct ranking player = {0};
 
         screenClear();
         screenGotoxy((MAXX/2 - 5), (MAXY/2));
