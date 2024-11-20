@@ -184,9 +184,9 @@ void displayRanking(struct ranking *head) {
     struct ranking *atual = head;
     int posicao = 1;
 
-    printf("\n-*-*- PLACAR -*-*-\n");
+    printf("\n                -*-*- PLACAR -*-*-\n\n\n");
 
-    while (atual != NULL && posicao <= 10) { // 10 primeiros
+    while (atual != NULL && posicao <= 20) { // 10 primeiros
 
         printf("%d. %s %s - TIJOLOS QUEBRADOS: %d TEMPO: %d\n", posicao, atual->nome, atual->sobrenome, atual->tijolosQuebrados, atual->tempo);
         
@@ -371,27 +371,17 @@ void printBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS]) {
     }
 }
 
-
-void printKey(int ch){ // adaptar para score/tempo
+void printKey(){ // adaptar para score/tempo
 
     screenSetColor(YELLOW, DARKGRAY);
-    screenGotoxy(35, 22);
-    printf("Key code :");
+    screenGotoxy(12, 22);
+    printf("DIGITE A PARA MOVER À ESQUERDA E D PARA MOVER À DIREITA");
 
-    screenGotoxy(34, 23);
-    printf("            ");
-
-    screenGotoxy(39, 23);
-
-    printf("%d ", ch);
-    while (keyhit())
-    {
-        printf("%d ", readch());
-    }
+    screenSetColor(GREEN, DARKGRAY);
+    screenGotoxy(33, 25);
+    printf("BOA SORTE!");
 
 }
-
-
 
 int main() {
 
@@ -418,6 +408,8 @@ int main() {
     printBricks(tijolos);
 
     struct ranking *head = arquivoParaLista("ranking.txt");
+
+    printKey();
 
     screenUpdate();
 
@@ -458,19 +450,19 @@ int main() {
 
             screenSetColor(RED, DARKGRAY);
             screenGotoxy((MAXX/2 - 5), (MAXY/2 - 3));
-            printf("GAME OVER");
+            printf("<------> GAME OVER <------>");
 
             screenSetColor(YELLOW, DARKGRAY);
-            screenGotoxy((MAXX/2 - 15), (MAXY/2 - 1));
+            screenGotoxy((MAXX/2 - 6), (MAXY/2 - 1));
             printf("Tijolos quebrados: %d (%d)", tijolosQuebrados, tempo);
 
             
             struct ranking player = {0};
-            char nome[51] = NULL;
+            char nome[51] = {0};
             char sobrenome[51] = {0};
 
             screenSetColor(GREEN, DARKGRAY);
-            screenGotoxy((MAXX/2 - 20), (MAXY/2 + 1));
+            screenGotoxy((MAXX/2 - 6), (MAXY/2 + 1));
             printf("Digite seu nome: ");
             screenShowCursor();
             
@@ -479,11 +471,13 @@ int main() {
             }
 
             screenSetColor(WHITE, DARKGRAY);
-            screenGotoxy((MAXX/2 - 20), (MAXY/2 + 2));
+            screenGotoxy((MAXX/2 - 6), (MAXY/2 + 2));
+            screenSetColor(WHITE, DARKGRAY);
             scanf("%50s", nome);
 
-            screenGotoxy((MAXX/2 - 20), (MAXY/2 + 3));
+            screenGotoxy((MAXX/2 - 6), (MAXY/2 + 3));
             printf("Digite seu sobrenome: ");
+            screenSetColor(WHITE, DARKGRAY);
             scanf("%50s", sobrenome);
 
             screenHideCursor();
@@ -501,17 +495,15 @@ int main() {
             displayRanking(head);
 
             screenSetColor(YELLOW, DARKGRAY);
-            screenGotoxy((MAXX/2 - 20), (MAXY/2 + 10));
-            printf("Pressione ENTER para reiniciar");
+            screenGotoxy((MAXX/2 - 23), (MAXY/2 + 10));
+            printf("OBRIGADO POR JOGAR!");
             screenUpdate();
 
-            // Esperar tecla para reiniciar
             while(1) {
                 if (keyhit()) {
                     ch = readch();
                     if (ch == 13) break; // ENTER
                     if (ch == 27) {
-                        // Limpar memória e sair
                         freeLista(head);
                         keyboardDestroy();
                         screenDestroy();
@@ -522,7 +514,6 @@ int main() {
             }
         }
 
-        // Se ESC for pressionado, sair do jogo
         if (ch == 27) {
             freeLista(head);
             keyboardDestroy();
