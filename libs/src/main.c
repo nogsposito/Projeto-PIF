@@ -371,16 +371,26 @@ void printBricks(struct brick tijolos[NUM_LINHAS][NUM_COLUNAS]) {
     }
 }
 
-void printKey(){ // adaptar para score/tempo
+void printWelcome(){ // adaptar para score/tempo
 
     screenSetColor(YELLOW, DARKGRAY);
-    screenGotoxy(12, 22);
+    screenGotoxy(12, 21);
     printf("DIGITE A PARA MOVER À ESQUERDA E D PARA MOVER À DIREITA");
 
     screenSetColor(GREEN, DARKGRAY);
-    screenGotoxy(33, 25);
+    screenGotoxy(35, 23);
     printf("BOA SORTE!");
 
+}
+
+void apagarWelcome(){
+    screenSetColor(YELLOW, DARKGRAY);
+    screenGotoxy(12, 21);
+    printf("                                                            ");
+
+    screenSetColor(GREEN, DARKGRAY);
+    screenGotoxy(35, 23);
+    printf("                  ");
 }
 
 int main() {
@@ -409,7 +419,8 @@ int main() {
 
     struct ranking *head = arquivoParaLista("ranking.txt");
 
-    printKey();
+    printWelcome();
+    int welcome = 1;
 
     screenUpdate();
 
@@ -430,6 +441,9 @@ int main() {
             }
 
             if (startGame == 1) {
+
+                if (welcome == 1){apagarWelcome(); welcome = 0;}
+                
                 if (timerTimeOver()) {
                     tempo++;
 
@@ -497,6 +511,9 @@ int main() {
             screenSetColor(YELLOW, DARKGRAY);
             screenGotoxy((MAXX/2 - 23), (MAXY/2 + 10));
             printf("OBRIGADO POR JOGAR!");
+            screenSetColor(GREEN, DARKGRAY);
+            screenGotoxy((MAXX/2 - 24), (MAXY/2 + 12));
+            printf("APERTE ESC PARA SAIR");
             screenUpdate();
 
             while(1) {
