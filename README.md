@@ -4,7 +4,7 @@
 
 **Necessário ter Linux instalado no computador e Git com ele.**
 
-1. Abrir o terminal do Linux (Com git instalado) e digitar o seguinte comando:
+1. Abrir o terminal do Linux (Com git instalado e ambiente virtual instalado e ativado) e digitar o seguinte comando:
    
    ```console
    git clone https://github.com/nogsposito/Projeto-PIF.git
